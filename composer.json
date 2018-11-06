@@ -6,6 +6,8 @@
   },
   "require": {
     "php": "^7.2",
-    "cboden/ratchet": "^0.4.1"
+    "cboden/ratchet": "^0.4.1",
+    "psr/log": "^1.0",
+    "monolog/monolog": "^1.24"
   }
 }
