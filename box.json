@@ -1,0 +1,10 @@
+{
+  "chmod": "0755",
+  "directories": [
+    "src/",
+    "vendor/"
+  ],
+  "main": "ws-timer.php",
+  "output": "build/ws-timer.phar",
+  "stub": true
+}
