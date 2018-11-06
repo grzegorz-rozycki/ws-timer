@@ -3,19 +3,31 @@
 use Psr\Log\LoggerInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
+use React\EventLoop\LoopInterface;
 
 class TimerApplication implements MessageComponentInterface
 {
+    public const TICK_INTERVAL = 1;
+
     protected $connections;
 
     protected $logger;
 
+    protected $loop;
 
-    public function __construct(LoggerInterface $logger)
+    protected $timer;
+
+    public function __construct(LoggerInterface $logger, LoopInterface $loop)
     {
         $this->connections = new SplObjectStorage();
         $this->logger = $logger;
-        $this->logger->info('Application ready to handle connections');
+        $this->loop = $loop;
+        $this->timer = $loop->addPeriodicTimer(self::TICK_INTERVAL, [$this, 'handleTick']);
+    }
+
+    public function __destruct()
+    {
+        $this->loop->cancelTimer($this->timer);
     }
 
     /** @inheritdoc */
@@ -43,5 +55,16 @@ class TimerApplication implements MessageComponentInterface
     function onMessage(ConnectionInterface $from, $msg)
     {
 
+    }
+
+    function handleTick()
+    {
+        $now = date(DATE_W3C);
+        $this->logger->debug($now);
+
+        /** @var ConnectionInterface $connection */
+        foreach ($this->connections as $connection) {
+            $connection->send($now);
+        }
     }
 }
