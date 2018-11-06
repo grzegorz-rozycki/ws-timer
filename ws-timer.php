@@ -16,14 +16,18 @@ var conn = new WebSocket('ws://localhost:8080');
 conn.onopen = () => console.log("Connection established!");
 conn.onmessage = e => console.log(e.data);
 */
-
+$handler = ! getenv('APP_DEBUG')
+    ? $handler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::WARNING)
+    : $handler = new ErrorLogHandler();
+$host = getenv('APP_HOST') ?: '0.0.0.0';
+$port = getenv('APP_PORT') ?: '8080';
 
 $logger = new Logger('log');
-$logger->pushHandler(new ErrorLogHandler());
+$logger->pushHandler($handler);
 $logger->info('Server started');
 
 $loop = LoopFactory::create();
 $app = new TimerApplication($logger, $loop);
-$socket = new Server('127.0.0.1:8080', $loop);
+$socket = new Server("{$host}:{$port}", $loop);
 $server = new IoServer(new HttpServer(new WsServer($app)), $socket, $loop);
 $server->run();
