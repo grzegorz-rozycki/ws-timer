@@ -11,9 +11,10 @@ use React\Socket\Server;
 
 require __DIR__ . '/vendor/autoload.php';
 
+// JavaScript client code
 /*
 var conn = new WebSocket('ws://localhost:8080');
-conn.onopen = () => console.log("Connection established!");
+conn.onopen = () => console.log('Connection established!');
 conn.onmessage = e => console.log(e.data);
 */
 $handler = ! getenv('APP_DEBUG')
