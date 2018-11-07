@@ -1,6 +1,6 @@
 FROM php:7.2
 
-LABEL maintainer="it@e-kierowca.pl"
+LABEL maintainer="grozycki@op.pl"
 
 ENV APP_DEBUG=${DEBUG:-0}
 ENV APP_HOST=${HOST:-0.0.0.0}
